@@ -160,7 +160,7 @@ describe('example to-do app', function () {
   let localStorageSetItem: Storage['setItem']
 
   beforeEach(function () {
-    cy.visit('https://example.cypress.io/todo', {
+    cy.visit('/', {
       onBeforeLoad(win: Cypress.AUTWindow) {
         localStorageSetItem = cy.spy(win.localStorage.__proto__, 'setItem')
       },
