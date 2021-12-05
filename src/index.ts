@@ -1,4 +1,4 @@
-import {App} from './view/app'
+import {AppController} from './app-controller'
 
 if (module.hot) {
   module.hot.dispose(() => {
@@ -6,5 +6,4 @@ if (module.hot) {
   })
 }
 
-const appView = new App()
-document.body.appendChild(appView.el)
+new AppController()

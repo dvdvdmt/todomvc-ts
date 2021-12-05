@@ -154,7 +154,7 @@ describe('example to-do app', function () {
 
   const checkItemSaved = () => {
     cy.wrap(localStorageSetItem, {log: false}).should('have.been.called')
-    cy.wrap(localStorageSetItem, {log: false}).invoke('reset')
+    cy.wrap(localStorageSetItem, {log: false}).invoke('resetHistory')
   }
 
   let localStorageSetItem: Storage['setItem']
