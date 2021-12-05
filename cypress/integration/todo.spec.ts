@@ -175,11 +175,7 @@ describe('example to-do app', function () {
 
   context('When page is initially opened', function () {
     it('should focus on the todo input field', function () {
-      // get the currently focused element and assert
-      // that it has class='new-todo'
-      //
-      // http://on.cypress.io/focused
-      cy.focused().should('have.id', 'new-todo')
+      cy.get('.new-todo').should('be.focused')
     })
   })
 
