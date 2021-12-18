@@ -5,7 +5,9 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "start": "parcel src/index.html --open",
-    "build": "parcel build src/index.html"
+    "build": "parcel build src/index.html",
+    "e2e:run": "cypress run",
+    "e2e:open": "cypress open"
   },
   "devDependencies": {
     "@types/webpack-env": "^1.16.3",

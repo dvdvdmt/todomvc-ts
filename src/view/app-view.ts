@@ -1,5 +1,6 @@
 import {IView} from './i-view'
 import {AppModel} from '../app-model'
+import {TodoList} from './todo-list'
 
 interface IProps {
   model: Readonly<AppModel>
@@ -37,12 +38,19 @@ export class AppView implements IView {
   el: HTMLElement
   private inputEl: HTMLInputElement
   private props: IProps
+  private todoList: TodoList
+  private mainEl: HTMLElement
 
   constructor(props: IProps) {
     this.props = props
     this.el = this.createRootElement()
+    this.mainEl = this.createMainElement()
     this.inputEl = this.createNewTodoInputElement()
-    this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.renderTodoList)
+    this.todoList = new TodoList(
+      {items: this.props.model.todos},
+      {element: this.el.querySelector<HTMLElement>('.todo-list')!}
+    )
+    this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.updateTodoList)
   }
 
   private createNewTodoInputElement() {
@@ -59,13 +67,27 @@ export class AppView implements IView {
     return templateEl.content.cloneNode(true) as HTMLElement
   }
 
-  render(): void {}
+  render(): void {
+    if (this.props.model.hasTodos) {
+      this.showMainElement()
+    }
+    this.todoList.render()
+  }
 
-  private renderTodoList = () => {
-    console.log(`[renderTodoList this.props.model.todos]`, this.props.model.todos)
+  private updateTodoList = () => {
+    this.todoList.props.items = this.props.model.todos
+    this.render()
   }
 
   clearInput() {
     this.inputEl.value = ''
+  }
+
+  private createMainElement(): HTMLElement {
+    return this.el.querySelector<HTMLElement>('.main')!
+  }
+
+  private showMainElement(): void {
+    this.mainEl.style.display = 'block'
   }
 }

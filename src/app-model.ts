@@ -6,13 +6,21 @@ interface ITodo {
 
 export class AppModel extends EventTarget {
   static readonly todosUpdatedEvent = 'todosUpdatedEvent'
-  private readonly storageKey: string
   todos: ITodo[]
+  private readonly storageKey: string
 
   constructor() {
     super()
     this.storageKey = 'todos'
     this.todos = []
+  }
+
+  get todosNumber(): number {
+    return this.todos.length
+  }
+
+  get hasTodos(): boolean {
+    return this.todosNumber > 0
   }
 
   add(title: string): void {

@@ -9,6 +9,7 @@ export class AppController {
     this.model = new AppModel()
     this.view = new AppView({model: this.model, onTodoAdd: this.addTodo})
     document.body.appendChild(this.view.el)
+    this.view.render()
   }
 
   addTodo = (value: string) => {
