@@ -40,14 +40,23 @@ export class AppView implements IView {
 
   constructor(props: IProps) {
     this.props = props
-    const templateEl = document.createElement('template')
-    templateEl.innerHTML = this.template
-    this.el = templateEl.content.cloneNode(true) as HTMLElement
-    this.inputEl = this.el.querySelector<HTMLInputElement>('.new-todo')!
-    this.inputEl.addEventListener('change', () => {
+    this.el = this.createRootElement()
+    this.inputEl = this.createNewTodoInputElement()
+    this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.renderTodoList)
+  }
+
+  private createNewTodoInputElement() {
+    const result = this.el.querySelector<HTMLInputElement>('.new-todo')!
+    result.addEventListener('change', () => {
       this.props.onTodoAdd(this.inputEl.value)
     })
-    this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.renderTodoList)
+    return result
+  }
+
+  private createRootElement() {
+    const templateEl = document.createElement('template')
+    templateEl.innerHTML = this.template
+    return templateEl.content.cloneNode(true) as HTMLElement
   }
 
   render(): void {}
