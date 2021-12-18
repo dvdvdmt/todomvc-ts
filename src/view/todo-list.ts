@@ -1,13 +1,9 @@
 import {IView} from './i-view'
-
-interface ITodoItem {
-  id: number
-  completed: boolean
-  title: string
-}
+import {ITodo} from '../app-model'
+import {TodoItem} from './todo-item'
 
 interface IProps {
-  items: ITodoItem[]
+  items: ITodo[]
 }
 
 interface IOptions {
@@ -25,21 +21,10 @@ export class TodoList implements IView {
 
   render(): void {
     this.el.innerHTML = ''
-    const items = this.props.items.map((item) => this.createListItemElement(item))
-    this.el.append(...items)
-  }
-
-  createListItemElement(item: ITodoItem): HTMLElement {
-    const result = document.createElement('li')
-    result.dataset.dataId = String(item.id)
-    if (item.completed) {
-      result.classList.add('completed')
-    }
-    result.innerHTML = `<div class='view'>
-  <input class='toggle' type='checkbox' ${item.completed ? 'checked' : ''}>
-  <label>${item.title}</label>
-  <button class='destroy'></button>
-</div>`
-    return result
+    this.props.items.forEach((item) => {
+      const itemView = new TodoItem({todo: item})
+      itemView.render()
+      this.el.append(itemView.el)
+    })
   }
 }
