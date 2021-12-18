@@ -40,6 +40,7 @@ export class AppView implements IView {
   private props: IProps
   private todoList: TodoList
   private mainEl: HTMLElement
+  private todoCountEl: HTMLElement
 
   constructor(props: IProps) {
     this.props = props
@@ -50,6 +51,7 @@ export class AppView implements IView {
       {items: this.props.model.todos},
       {element: this.el.querySelector<HTMLElement>('.todo-list')!}
     )
+    this.todoCountEl = this.el.querySelector<HTMLElement>('.todo-count')!
     this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.updateTodoList)
   }
 
@@ -70,6 +72,7 @@ export class AppView implements IView {
   render(): void {
     if (this.props.model.hasTodos) {
       this.showMainElement()
+      this.todoCountEl.innerText = String(this.props.model.todoCount)
     }
     this.todoList.render()
   }

@@ -15,12 +15,12 @@ export class AppModel extends EventTarget {
     this.todos = []
   }
 
-  get todosNumber(): number {
+  get todoCount(): number {
     return this.todos.length
   }
 
   get hasTodos(): boolean {
-    return this.todosNumber > 0
+    return this.todoCount > 0
   }
 
   add(title: string): void {
