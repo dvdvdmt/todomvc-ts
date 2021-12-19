@@ -13,7 +13,7 @@ export class AppController {
   }
 
   addTodo = (value: string) => {
-    this.model.add(value)
+    this.model.add(value.trim())
     this.view.clearInput()
   }
 }
