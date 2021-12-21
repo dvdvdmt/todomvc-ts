@@ -7,13 +7,25 @@ export class AppController {
 
   constructor() {
     this.model = new AppModel()
-    this.view = new AppView({model: this.model, onTodoAdd: this.addTodo})
+    this.view = new AppView({
+      model: this.model,
+      onTodoAdd: this.addTodo,
+      onToggleAll: this.toggleAll,
+    })
     document.body.appendChild(this.view.el)
     this.view.render()
   }
 
-  addTodo = (value: string) => {
+  private addTodo = (value: string) => {
     this.model.add(value.trim())
     this.view.clearInput()
+  }
+
+  private toggleAll = (checked: boolean) => {
+    if (checked) {
+      this.model.markAllComplete()
+    } else {
+      this.model.markAllIncomplete()
+    }
   }
 }

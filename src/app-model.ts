@@ -28,6 +28,20 @@ export class AppModel extends EventTarget {
     this.save()
   }
 
+  markAllComplete() {
+    this.todos.forEach((todo) => {
+      todo.completed = true
+    })
+    this.save()
+  }
+
+  markAllIncomplete() {
+    this.todos.forEach((todo) => {
+      todo.completed = false
+    })
+    this.save()
+  }
+
   private save() {
     window.localStorage.setItem(this.storageKey, JSON.stringify(this.todos))
     this.dispatchEvent(new Event(AppModel.todosUpdatedEvent))

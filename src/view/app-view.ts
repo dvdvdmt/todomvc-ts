@@ -5,6 +5,7 @@ import {TodoList} from './todo-list'
 interface IProps {
   model: Readonly<AppModel>
   onTodoAdd(value: string): void
+  onToggleAll(checked: boolean): void
 }
 
 export class AppView implements IView {
@@ -41,6 +42,7 @@ export class AppView implements IView {
   private todoList: TodoList
   private mainEl: HTMLElement
   private todoCountEl: HTMLElement
+  private toggleAllEl: HTMLInputElement
 
   constructor(props: IProps) {
     this.props = props
@@ -52,13 +54,22 @@ export class AppView implements IView {
       {element: this.el.querySelector<HTMLElement>('.todo-list')!}
     )
     this.todoCountEl = this.el.querySelector<HTMLElement>('.todo-count')!
+    this.toggleAllEl = this.createToggleAllEl()
     this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.updateTodoList)
+  }
+
+  private createToggleAllEl() {
+    const result = this.el.querySelector<HTMLInputElement>('.toggle-all')!
+    result.addEventListener('change', () => {
+      this.props.onToggleAll(result.checked)
+    })
+    return result
   }
 
   private createNewTodoInputElement() {
     const result = this.el.querySelector<HTMLInputElement>('.new-todo')!
     result.addEventListener('change', () => {
-      this.props.onTodoAdd(this.inputEl.value)
+      this.props.onTodoAdd(result.value)
     })
     return result
   }
