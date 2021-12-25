@@ -46,4 +46,20 @@ export class AppModel extends EventTarget {
     window.localStorage.setItem(this.storageKey, JSON.stringify(this.todos))
     this.dispatchEvent(new Event(AppModel.todosUpdatedEvent))
   }
+
+  markComplete(todo: ITodo) {
+    const target = this.todos.find(({id}) => id === todo.id)
+    if (target) {
+      target.completed = true
+      this.save()
+    }
+  }
+
+  markIncomplete(todo: ITodo) {
+    const target = this.todos.find(({id}) => id === todo.id)
+    if (target) {
+      target.completed = false
+      this.save()
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import {AppModel} from './app-model'
+import {AppModel, ITodo} from './app-model'
 import {AppView} from './view/app-view'
 
 export class AppController {
@@ -11,6 +11,8 @@ export class AppController {
       model: this.model,
       onTodoAdd: this.addTodo,
       onToggleAll: this.toggleAll,
+      onTodoCheck: this.onTodoCheck,
+      onTodoUncheck: this.onTodoUncheck,
     })
     document.body.appendChild(this.view.el)
     this.view.render()
@@ -27,5 +29,13 @@ export class AppController {
     } else {
       this.model.markAllIncomplete()
     }
+  }
+
+  private onTodoCheck = (todo: ITodo) => {
+    this.model.markComplete(todo)
+  }
+
+  private onTodoUncheck = (todo: ITodo) => {
+    this.model.markIncomplete(todo)
   }
 }

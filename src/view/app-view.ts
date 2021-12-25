@@ -1,11 +1,13 @@
 import {IView} from './i-view'
-import {AppModel} from '../app-model'
+import {AppModel, ITodo} from '../app-model'
 import {TodoList} from './todo-list'
 
 interface IProps {
   model: Readonly<AppModel>
   onTodoAdd(value: string): void
   onToggleAll(checked: boolean): void
+  onTodoCheck: (todo: ITodo) => void
+  onTodoUncheck: (todo: ITodo) => void
 }
 
 export class AppView implements IView {
@@ -50,7 +52,11 @@ export class AppView implements IView {
     this.mainEl = this.createMainElement()
     this.inputEl = this.createNewTodoInputElement()
     this.todoList = new TodoList(
-      {items: this.props.model.todos},
+      {
+        items: this.props.model.todos,
+        onCheck: this.props.onTodoCheck,
+        onUncheck: this.props.onTodoUncheck,
+      },
       {element: this.el.querySelector<HTMLElement>('.todo-list')!}
     )
     this.todoCountEl = this.el.querySelector<HTMLElement>('.todo-count')!

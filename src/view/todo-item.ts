@@ -3,6 +3,8 @@ import {ITodo} from '../app-model'
 
 interface IProps {
   todo: ITodo
+  onCheck(todo: ITodo): void
+  onUncheck(todo: ITodo): void
 }
 
 export class TodoItem implements IView {
@@ -34,6 +36,13 @@ export class TodoItem implements IView {
     const result = document.createElement('input')
     result.classList.add('toggle')
     result.type = 'checkbox'
+    result.addEventListener('change', () => {
+      if (result.checked) {
+        this.props.onCheck(this.props.todo)
+      } else {
+        this.props.onUncheck(this.props.todo)
+      }
+    })
     return result
   }
 
