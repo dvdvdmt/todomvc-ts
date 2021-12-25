@@ -44,7 +44,7 @@ export class AppView implements IView {
   private todoList: TodoList
   private main: IView
   private todoCount: IView
-  private toggleAllEl: HTMLInputElement
+  private toggleAll: IView
 
   constructor(props: IProps) {
     this.props = props
@@ -60,16 +60,22 @@ export class AppView implements IView {
       {element: this.el.querySelector<HTMLElement>('.todo-list')!}
     )
     this.todoCount = this.createTodoCount()
-    this.toggleAllEl = this.createToggleAllEl()
+    this.toggleAll = this.createToggleAll()
     this.props.model.addEventListener(AppModel.updatedEvent, this.onModelUpdated)
   }
 
-  private createToggleAllEl() {
-    const result = this.el.querySelector<HTMLInputElement>('.toggle-all')!
-    result.addEventListener('change', () => {
-      this.props.onToggleAll(result.checked)
+  private createToggleAll() {
+    const props = this.props
+    const el = this.el.querySelector<HTMLInputElement>('.toggle-all')!
+    el.addEventListener('change', () => {
+      this.props.onToggleAll(el.checked)
     })
-    return result
+    return {
+      el,
+      render() {
+        this.el.checked = props.model.isAllComplete
+      },
+    }
   }
 
   private createNewTodoInputElement() {
@@ -90,6 +96,7 @@ export class AppView implements IView {
     this.todoCount.render()
     this.main.render()
     this.todoList.render()
+    this.toggleAll.render()
   }
 
   private onModelUpdated = () => {

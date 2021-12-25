@@ -15,6 +15,10 @@ export class AppModel extends EventTarget {
     this.todos = []
   }
 
+  get isAllComplete(): boolean {
+    return this.hasTodos && this.todos.every((value) => value.completed)
+  }
+
   get todoCount(): number {
     return this.todos.length
   }
