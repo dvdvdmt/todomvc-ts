@@ -5,7 +5,7 @@ export interface ITodo {
 }
 
 export class AppModel extends EventTarget {
-  static readonly todosUpdatedEvent = 'todosUpdatedEvent'
+  static readonly updatedEvent = 'updatedEvent'
   todos: ITodo[]
   private readonly storageKey: string
 
@@ -44,7 +44,7 @@ export class AppModel extends EventTarget {
 
   private save() {
     window.localStorage.setItem(this.storageKey, JSON.stringify(this.todos))
-    this.dispatchEvent(new Event(AppModel.todosUpdatedEvent))
+    this.dispatchEvent(new Event(AppModel.updatedEvent))
   }
 
   markComplete(todo: ITodo) {

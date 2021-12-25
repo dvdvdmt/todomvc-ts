@@ -42,14 +42,14 @@ export class AppView implements IView {
   private inputEl: HTMLInputElement
   private props: IProps
   private todoList: TodoList
-  private mainEl: HTMLElement
-  private todoCountEl: HTMLElement
+  private main: IView
+  private todoCount: IView
   private toggleAllEl: HTMLInputElement
 
   constructor(props: IProps) {
     this.props = props
     this.el = this.createRootElement()
-    this.mainEl = this.createMainElement()
+    this.main = this.createMain()
     this.inputEl = this.createNewTodoInputElement()
     this.todoList = new TodoList(
       {
@@ -59,9 +59,9 @@ export class AppView implements IView {
       },
       {element: this.el.querySelector<HTMLElement>('.todo-list')!}
     )
-    this.todoCountEl = this.el.querySelector<HTMLElement>('.todo-count')!
+    this.todoCount = this.createTodoCount()
     this.toggleAllEl = this.createToggleAllEl()
-    this.props.model.addEventListener(AppModel.todosUpdatedEvent, this.updateTodoList)
+    this.props.model.addEventListener(AppModel.updatedEvent, this.onModelUpdated)
   }
 
   private createToggleAllEl() {
@@ -87,14 +87,12 @@ export class AppView implements IView {
   }
 
   render(): void {
-    if (this.props.model.hasTodos) {
-      this.showMainElement()
-      this.todoCountEl.innerText = String(this.props.model.todoCount)
-    }
+    this.todoCount.render()
+    this.main.render()
     this.todoList.render()
   }
 
-  private updateTodoList = () => {
+  private onModelUpdated = () => {
     this.todoList.props.items = this.props.model.todos
     this.render()
   }
@@ -103,11 +101,27 @@ export class AppView implements IView {
     this.inputEl.value = ''
   }
 
-  private createMainElement(): HTMLElement {
-    return this.el.querySelector<HTMLElement>('.main')!
+  private createMain() {
+    const props = this.props
+    return {
+      el: this.el.querySelector<HTMLElement>('.main')!,
+      render() {
+        if (props.model.hasTodos) {
+          this.el.style.display = 'block'
+        } else {
+          this.el.style.display = 'none'
+        }
+      },
+    }
   }
 
-  private showMainElement(): void {
-    this.mainEl.style.display = 'block'
+  private createTodoCount() {
+    const props = this.props
+    return {
+      el: this.el.querySelector<HTMLElement>('.todo-count')!,
+      render() {
+        this.el.innerText = String(props.model.todoCount)
+      },
+    }
   }
 }

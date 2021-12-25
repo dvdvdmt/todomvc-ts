@@ -13,13 +13,13 @@ interface IOptions {
 }
 
 export class TodoList implements IView {
+  el: HTMLElement
+  props: IProps
+
   constructor(props: IProps, options: IOptions) {
     this.props = props
     this.el = options.element
   }
-
-  el: HTMLElement
-  props: IProps
 
   render(): void {
     this.el.innerHTML = ''
