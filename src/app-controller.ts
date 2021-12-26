@@ -13,6 +13,7 @@ export class AppController {
       onToggleAll: this.toggleAll,
       onTodoCheck: this.onTodoCheck,
       onTodoUncheck: this.onTodoUncheck,
+      onTodoEdit: this.onTodoEdit,
     })
     document.body.appendChild(this.view.el)
     this.view.render()
@@ -37,5 +38,9 @@ export class AppController {
 
   private onTodoUncheck = (todo: ITodo) => {
     this.model.markIncomplete(todo)
+  }
+
+  private onTodoEdit = (todo: ITodo) => {
+    this.model.update(todo)
   }
 }

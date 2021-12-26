@@ -52,17 +52,29 @@ export class AppModel extends EventTarget {
   }
 
   markComplete(todo: ITodo) {
-    const target = this.todos.find(({id}) => id === todo.id)
+    const target = this.getById(todo.id)
     if (target) {
       target.completed = true
       this.save()
     }
   }
 
+  private getById(id: number): ITodo | undefined {
+    return this.todos.find((todo) => todo.id === id)
+  }
+
   markIncomplete(todo: ITodo) {
-    const target = this.todos.find(({id}) => id === todo.id)
+    const target = this.getById(todo.id)
     if (target) {
       target.completed = false
+      this.save()
+    }
+  }
+
+  update(todo: ITodo) {
+    const target = this.getById(todo.id)
+    if (target) {
+      Object.assign(target, todo)
       this.save()
     }
   }

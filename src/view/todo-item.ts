@@ -1,7 +1,9 @@
 import {IView} from './i-view'
 import {ITodo} from '../app-model'
+import {TodoEditor} from './todo-editor'
 
 interface IProps {
+  editor: TodoEditor
   todo: ITodo
   onCheck(todo: ITodo): void
   onUncheck(todo: ITodo): void
@@ -9,18 +11,29 @@ interface IProps {
 
 export class TodoItem implements IView {
   el: HTMLElement
-  private props: IProps
+  props: IProps
   private checkboxEl: HTMLInputElement
   private labelEl: HTMLLabelElement
   private buttonEl: HTMLButtonElement
+  private viewEl: HTMLElement
 
   constructor(props: IProps) {
     this.props = props
     this.el = document.createElement('li')
+    this.viewEl = this.createViewElement()
     this.checkboxEl = this.createCheckboxElement()
-    this.labelEl = document.createElement('label')
+    this.labelEl = this.createLabelElement()
     this.buttonEl = this.createButtonElement()
-    this.el.append(this.checkboxEl, this.labelEl, this.buttonEl)
+    this.viewEl.append(this.checkboxEl, this.labelEl, this.buttonEl)
+    this.el.append(this.viewEl)
+  }
+
+  private createLabelElement() {
+    const result = document.createElement('label')
+    result.addEventListener('dblclick', () => {
+      this.props.editor.open(this)
+    })
+    return result
   }
 
   render(): void {
@@ -49,6 +62,12 @@ export class TodoItem implements IView {
   private createButtonElement(): HTMLButtonElement {
     const result = document.createElement('button')
     result.className = 'destroy'
+    return result
+  }
+
+  private createViewElement(): HTMLElement {
+    const result = document.createElement('div')
+    result.className = 'view'
     return result
   }
 }
