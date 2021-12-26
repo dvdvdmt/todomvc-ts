@@ -50,7 +50,7 @@ export class AppView implements IView {
   private todoCount: IView
   private toggleAll: IView
   private todoEditor: TodoEditor
-  private clearCompletedEl: HTMLElement
+  private clearCompleted: IView
 
   constructor(props: IProps) {
     this.props = props
@@ -70,16 +70,26 @@ export class AppView implements IView {
     )
     this.todoCount = this.createTodoCount()
     this.toggleAll = this.createToggleAll()
-    this.clearCompletedEl = this.createClearCompleted()
+    this.clearCompleted = this.createClearCompleted()
     this.props.model.addEventListener(AppModel.updatedEvent, this.onModelUpdated)
   }
 
-  createClearCompleted(): HTMLElement {
-    const result = this.el.querySelector<HTMLElement>('.clear-completed')!
-    result.addEventListener('click', () => {
+  createClearCompleted() {
+    const props = this.props
+    const el = this.el.querySelector<HTMLElement>('.clear-completed')!
+    el.addEventListener('click', () => {
       this.props.onClearCompleted()
     })
-    return result
+    return {
+      el,
+      render() {
+        if (props.model.hasCompleted) {
+          el.style.display = 'initial'
+        } else {
+          el.style.display = 'none'
+        }
+      },
+    }
   }
 
   private createToggleAll() {
@@ -115,6 +125,7 @@ export class AppView implements IView {
     this.main.render()
     this.todoList.render()
     this.toggleAll.render()
+    this.clearCompleted.render()
   }
 
   private onModelUpdated = () => {

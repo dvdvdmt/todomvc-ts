@@ -27,6 +27,10 @@ export class AppModel extends EventTarget {
     return this.todoCount > 0
   }
 
+  get hasCompleted(): boolean {
+    return this.todos.some((todo) => todo.completed)
+  }
+
   add(title: string): void {
     this.todos.push({id: this.todos.length, completed: false, title})
     this.save()
