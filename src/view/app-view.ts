@@ -10,6 +10,7 @@ interface IProps {
   onTodoCheck(todo: ITodo): void
   onTodoUncheck(todo: ITodo): void
   onTodoEdit(todo: ITodo): void
+  onTodoDelete(todo: ITodo): void
 }
 
 export class AppView implements IView {
@@ -52,7 +53,7 @@ export class AppView implements IView {
   constructor(props: IProps) {
     this.props = props
     this.todoEditor = new TodoEditor({
-      onChange: this.props.onTodoEdit,
+      onChange: this.onTodoChange,
     })
     this.el = this.createRootElement()
     this.main = this.createMain()
@@ -135,6 +136,14 @@ export class AppView implements IView {
       render() {
         this.el.innerText = String(props.model.todoCount)
       },
+    }
+  }
+
+  private onTodoChange = (todo: ITodo) => {
+    if (todo.title) {
+      this.props.onTodoEdit(todo)
+    } else {
+      this.props.onTodoDelete(todo)
     }
   }
 }

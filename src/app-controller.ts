@@ -14,6 +14,7 @@ export class AppController {
       onTodoCheck: this.onTodoCheck,
       onTodoUncheck: this.onTodoUncheck,
       onTodoEdit: this.onTodoEdit,
+      onTodoDelete: this.onTodoDelete,
     })
     document.body.appendChild(this.view.el)
     this.view.render()
@@ -42,5 +43,9 @@ export class AppController {
 
   private onTodoEdit = (todo: ITodo) => {
     this.model.update(todo)
+  }
+
+  private onTodoDelete = (todo: ITodo) => {
+    this.model.delete(todo)
   }
 }

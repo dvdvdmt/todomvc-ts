@@ -78,4 +78,9 @@ export class AppModel extends EventTarget {
       this.save()
     }
   }
+
+  delete(todo: ITodo) {
+    this.todos = this.todos.filter(({id}) => id !== todo.id)
+    this.save()
+  }
 }
