@@ -6,13 +6,12 @@ export interface ITodo {
 
 export class AppModel extends EventTarget {
   static readonly updatedEvent = 'updatedEvent'
+  static readonly storageKey = 'todos'
   todos: ITodo[]
-  private readonly storageKey: string
 
   constructor() {
     super()
-    this.storageKey = 'todos'
-    this.todos = []
+    this.todos = AppModel.getTodosFromStorage()
   }
 
   get isAllComplete(): boolean {
@@ -29,6 +28,23 @@ export class AppModel extends EventTarget {
 
   get hasCompleted(): boolean {
     return this.todos.some((todo) => todo.completed)
+  }
+
+  static getTodosFromStorage(): ITodo[] {
+    const json = localStorage.getItem(AppModel.storageKey)
+    if (!json) {
+      return []
+    }
+    let result
+    try {
+      result = JSON.parse(json)
+    } catch (e) {
+      return []
+    }
+    if (!Array.isArray(result)) {
+      return []
+    }
+    return result
   }
 
   add(title: string): void {
@@ -50,21 +66,12 @@ export class AppModel extends EventTarget {
     this.save()
   }
 
-  private save() {
-    window.localStorage.setItem(this.storageKey, JSON.stringify(this.todos))
-    this.dispatchEvent(new Event(AppModel.updatedEvent))
-  }
-
   markComplete(todo: ITodo) {
     const target = this.getById(todo.id)
     if (target) {
       target.completed = true
       this.save()
     }
-  }
-
-  private getById(id: number): ITodo | undefined {
-    return this.todos.find((todo) => todo.id === id)
   }
 
   markIncomplete(todo: ITodo) {
@@ -91,5 +98,14 @@ export class AppModel extends EventTarget {
   deleteCompleted() {
     this.todos = this.todos.filter(({completed}) => !completed)
     this.save()
+  }
+
+  private save() {
+    window.localStorage.setItem(AppModel.storageKey, JSON.stringify(this.todos))
+    this.dispatchEvent(new Event(AppModel.updatedEvent))
+  }
+
+  private getById(id: number): ITodo | undefined {
+    return this.todos.find((todo) => todo.id === id)
   }
 }
