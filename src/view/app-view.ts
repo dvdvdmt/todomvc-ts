@@ -5,6 +5,7 @@ import {TodoEditor} from './todo-editor'
 
 interface IProps {
   model: Readonly<AppModel>
+  onClearCompleted(): void
   onTodoAdd(value: string): void
   onToggleAll(checked: boolean): void
   onTodoCheck(todo: ITodo): void
@@ -49,6 +50,7 @@ export class AppView implements IView {
   private todoCount: IView
   private toggleAll: IView
   private todoEditor: TodoEditor
+  private clearCompletedEl: HTMLElement
 
   constructor(props: IProps) {
     this.props = props
@@ -68,7 +70,16 @@ export class AppView implements IView {
     )
     this.todoCount = this.createTodoCount()
     this.toggleAll = this.createToggleAll()
+    this.clearCompletedEl = this.createClearCompleted()
     this.props.model.addEventListener(AppModel.updatedEvent, this.onModelUpdated)
+  }
+
+  createClearCompleted(): HTMLElement {
+    const result = this.el.querySelector<HTMLElement>('.clear-completed')!
+    result.addEventListener('click', () => {
+      this.props.onClearCompleted()
+    })
+    return result
   }
 
   private createToggleAll() {

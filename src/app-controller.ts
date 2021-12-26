@@ -9,8 +9,9 @@ export class AppController {
     this.model = new AppModel()
     this.view = new AppView({
       model: this.model,
-      onTodoAdd: this.addTodo,
-      onToggleAll: this.toggleAll,
+      onClearCompleted: this.onClearCompleted,
+      onToggleAll: this.onToggleAll,
+      onTodoAdd: this.onTodoAdd,
       onTodoCheck: this.onTodoCheck,
       onTodoUncheck: this.onTodoUncheck,
       onTodoEdit: this.onTodoEdit,
@@ -20,12 +21,12 @@ export class AppController {
     this.view.render()
   }
 
-  private addTodo = (value: string) => {
+  private onTodoAdd = (value: string) => {
     this.model.add(value.trim())
     this.view.clearInput()
   }
 
-  private toggleAll = (checked: boolean) => {
+  private onToggleAll = (checked: boolean) => {
     if (checked) {
       this.model.markAllComplete()
     } else {
@@ -47,5 +48,9 @@ export class AppController {
 
   private onTodoDelete = (todo: ITodo) => {
     this.model.delete(todo)
+  }
+
+  private onClearCompleted() {
+    this.model.deleteCompleted()
   }
 }
