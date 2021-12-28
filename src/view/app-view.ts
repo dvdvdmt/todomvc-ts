@@ -1,5 +1,5 @@
 import {IView} from './i-view'
-import {AppModel, ITodo} from '../app-model'
+import {AppModel, ITodo, TodoFilter} from '../app-model'
 import {TodoList} from './todo-list'
 import {TodoEditor} from './todo-editor'
 
@@ -51,6 +51,7 @@ export class AppView implements IView {
   private toggleAll: IView
   private todoEditor: TodoEditor
   private clearCompleted: IView
+  private filters: IView
 
   constructor(props: IProps) {
     this.props = props
@@ -62,7 +63,7 @@ export class AppView implements IView {
     this.inputEl = this.createNewTodoInputElement()
     this.todoList = new TodoList(
       {
-        items: this.props.model.todos,
+        items: this.props.model.filteredTodos,
         onCheck: this.props.onTodoCheck,
         onUncheck: this.props.onTodoUncheck,
       },
@@ -71,6 +72,7 @@ export class AppView implements IView {
     this.todoCount = this.createTodoCount()
     this.toggleAll = this.createToggleAll()
     this.clearCompleted = this.createClearCompleted()
+    this.filters = this.createFilters()
     this.props.model.addEventListener(AppModel.updatedEvent, this.onModelUpdated)
   }
 
@@ -126,10 +128,11 @@ export class AppView implements IView {
     this.todoList.render()
     this.toggleAll.render()
     this.clearCompleted.render()
+    this.filters.render()
   }
 
   private onModelUpdated = () => {
-    this.todoList.props.items = this.props.model.todos
+    this.todoList.props.items = this.props.model.filteredTodos
     this.render()
   }
 
@@ -166,6 +169,25 @@ export class AppView implements IView {
       this.props.onTodoEdit(todo)
     } else {
       this.props.onTodoDelete(todo)
+    }
+  }
+
+  private createFilters() {
+    const props = this.props
+    const el = this.el.querySelector<HTMLElement>('.filters')!
+    const buttonIndexToFilter = [TodoFilter.All, TodoFilter.Active, TodoFilter.Completed]
+    const buttons = el.querySelectorAll('a')!
+    return {
+      el,
+      render() {
+        buttons.forEach((button, i) => {
+          if (buttonIndexToFilter[i] === props.model.filter) {
+            button.classList.add('selected')
+          } else {
+            button.classList.remove('selected')
+          }
+        })
+      },
     }
   }
 }

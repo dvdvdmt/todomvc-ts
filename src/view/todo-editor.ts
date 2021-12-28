@@ -6,9 +6,9 @@ interface IProps {
 }
 
 export class TodoEditor {
+  el: HTMLInputElement
   private props: IProps
   private editingTodo?: TodoItem
-  el: HTMLInputElement
 
   constructor(props: IProps) {
     this.props = props

@@ -4,14 +4,23 @@ export interface ITodo {
   title: string
 }
 
+export const enum TodoFilter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export class AppModel extends EventTarget {
   static readonly updatedEvent = 'updatedEvent'
   static readonly storageKey = 'todos'
   todos: ITodo[]
+  filter: TodoFilter
 
   constructor() {
     super()
     this.todos = AppModel.getTodosFromStorage()
+    this.filter = AppModel.getFilterFromUrl()
+    window.addEventListener('popstate', this.onAddressChange)
   }
 
   get isAllComplete(): boolean {
@@ -28,6 +37,27 @@ export class AppModel extends EventTarget {
 
   get hasCompleted(): boolean {
     return this.todos.some((todo) => todo.completed)
+  }
+
+  get filteredTodos(): ITodo[] {
+    if (this.filter === TodoFilter.Active) {
+      return this.todos.filter(({completed}) => !completed)
+    }
+    if (this.filter === TodoFilter.Completed) {
+      return this.todos.filter(({completed}) => completed)
+    }
+    return this.todos
+  }
+
+  static getFilterFromUrl(): TodoFilter {
+    const hash = window.location.hash
+    if (hash.includes(TodoFilter.Active)) {
+      return TodoFilter.Active
+    }
+    if (hash.includes(TodoFilter.Completed)) {
+      return TodoFilter.Completed
+    }
+    return TodoFilter.All
   }
 
   static getTodosFromStorage(): ITodo[] {
@@ -102,10 +132,19 @@ export class AppModel extends EventTarget {
 
   private save() {
     window.localStorage.setItem(AppModel.storageKey, JSON.stringify(this.todos))
-    this.dispatchEvent(new Event(AppModel.updatedEvent))
+    this.notify()
   }
 
   private getById(id: number): ITodo | undefined {
     return this.todos.find((todo) => todo.id === id)
+  }
+
+  private onAddressChange = () => {
+    this.filter = AppModel.getFilterFromUrl()
+    this.notify()
+  }
+
+  private notify() {
+    this.dispatchEvent(new Event(AppModel.updatedEvent))
   }
 }
