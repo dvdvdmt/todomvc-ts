@@ -1,15 +1,3 @@
 ## About
-This is a project template that uses TypeScript and Parcel bundler. 
-It is helpful in quick prototyping. You can clone the project and start tinkering with it.
-Clone:
-```shell
-git clone https://github.com/dvdvdmt/parcel-typescript-template.git <project-name>
-```
-Install dependencies:
-```shell
-npm i
-```
-Start:
-```shell
-npm start
-```
+This is an example of Todo list app that was build using [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) pattern and TypeScript.
+The original [TodoMVC](https://todomvc.com/) project inspired this work.
