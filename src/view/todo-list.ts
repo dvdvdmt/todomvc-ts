@@ -6,6 +6,7 @@ import {TodoEditor} from './todo-editor'
 interface IProps {
   items: ITodo[]
   onCheck(todo: ITodo): void
+  onDelete(todo: ITodo): void
   onUncheck(todo: ITodo): void
 }
 
@@ -33,6 +34,7 @@ export class TodoList implements IView {
         editor: this.editor,
         onCheck: this.props.onCheck,
         onUncheck: this.props.onUncheck,
+        onDelete: this.props.onDelete,
       })
       itemView.render()
       this.el.append(itemView.el)

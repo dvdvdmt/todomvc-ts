@@ -7,6 +7,7 @@ interface IProps {
   todo: ITodo
   onCheck(todo: ITodo): void
   onUncheck(todo: ITodo): void
+  onDelete(todo: ITodo): void
 }
 
 export class TodoItem implements IView {
@@ -23,7 +24,7 @@ export class TodoItem implements IView {
     this.viewEl = this.createViewElement()
     this.checkboxEl = this.createCheckboxElement()
     this.labelEl = this.createLabelElement()
-    this.buttonEl = this.createButtonElement()
+    this.buttonEl = this.createDeleteButtonElement()
     this.viewEl.append(this.checkboxEl, this.labelEl, this.buttonEl)
     this.el.append(this.viewEl)
   }
@@ -59,9 +60,12 @@ export class TodoItem implements IView {
     return result
   }
 
-  private createButtonElement(): HTMLButtonElement {
+  private createDeleteButtonElement(): HTMLButtonElement {
     const result = document.createElement('button')
     result.className = 'destroy'
+    result.addEventListener('click', () => {
+      this.props.onDelete(this.props.todo)
+    })
     return result
   }
 

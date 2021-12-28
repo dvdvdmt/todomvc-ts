@@ -66,6 +66,7 @@ export class AppView implements IView {
         items: this.props.model.filteredTodos,
         onCheck: this.props.onTodoCheck,
         onUncheck: this.props.onTodoUncheck,
+        onDelete: this.props.onTodoDelete,
       },
       {element: this.el.querySelector<HTMLElement>('.todo-list')!, editor: this.todoEditor}
     )

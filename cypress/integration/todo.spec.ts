@@ -402,6 +402,12 @@ describe('example to-do app', function () {
       visibleTodos().eq(2).should('contain', TODO_ITEM_THREE)
       checkTodosInLocalStorage('buy some sausages')
     })
+
+    it(`deletes an item on cross button click`, () => {
+      cy.createDefaultTodos()
+      visibleTodos().eq(1).find('.destroy').invoke('show').click()
+      visibleTodos().should('have.length', 2)
+    })
   })
 
   context('Editing', function () {
